@@ -9,4 +9,6 @@
 
 `articles_spider`为爬虫部分，使用equests+pyquery实现
 
+爬取指定关键字的搜索结果页面共100页
+
 爬取结果存储在MongoDB
