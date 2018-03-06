@@ -7,7 +7,7 @@
 - 执行`run.py`
 - 访问`http://localhost:5000/get`获取一个可用代理
 
-`articles_spider`为爬虫部分，使用equests+pyquery实现
+`articles_spider`为爬虫部分，使用requests+pyquery实现
 
 爬取指定关键字的搜索结果页面共100页
 
