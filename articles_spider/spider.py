@@ -7,6 +7,8 @@ import requests
 from  requests.exceptions import ConnectionError
 from pyquery import PyQuery as pq
 import pymongo
+# from multiprocessing import Pool
+# from multiprocessing.dummy import Pool as TheadPool
 
 from articles_spider.config import *
 
@@ -17,7 +19,7 @@ base_url = 'http://weixin.sogou.com/weixin?'
 
 # 注意cookie是有时限的，失效以后页面会有‘Auth Result: 无效用户’的提示
 headers = {
-    'Cookie': 'SUV=00F817877D5818195A97A660F9653816; ABTEST=8|1519887973|v1; IPLOC=CN4401; SUID=334DDEDB232C940A000000005A97A665; ppinf=5|1519887982|1521097582|dHJ1c3Q6MToxfGNsaWVudGlkOjQ6MjAxN3x1bmlxbmFtZTozOllKRnxjcnQ6MTA6MTUxOTg4Nzk4MnxyZWZuaWNrOjM6WUpGfHVzZXJpZDo0NDpvOXQybHVDaV9HRS1yM1dZVGFYM2M4M1ViVGcwQHdlaXhpbi5zb2h1LmNvbXw; pprdig=SX2TpppI42peXRSFlYlmpHjGGRWsgdCTJgVzFHe98R7da_AtvtmM58k9Dn-NUyLfI8Pjuju-52ypxorHoGpjNKKRcEe-rVVDeGf4Fik88jmUUNKIs2DC3vbdC1q2jRKKJ_HUH-qkRMhyub9TBM-s1yFazjrTbKRaGqCPy70B17M; sgid=21-33848325-AVqXpm6uayQ9FLr6yRNY4fU; SNUID=AED343459E98F8CAE2CCBF629E655B89; ppmdig=1519887982000000e151ae0c2a6f0c9ca0b24e10ab19056e; JSESSIONID=aaaMfI7A6FrLcgMEQTwhw',
+    'Cookie': 'xxxxxxxxxxxxxx',  # 你的cookies
     'Host': 'weixin.sogou.com',
     'Upgrade-Insecure-Requests': '1',
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.186 Safari/537.36',
@@ -73,10 +75,10 @@ def get_html(url, count=1):
         return get_html(url, count)
 
 
-def get_index(keyword, page):
+def get_index(page):
     """构造url调用get_html()获取页面信息"""
     data = {
-        'query': keyword,
+        'query': KEYWORD,
         'type': 2,
         'page': page
     }
@@ -131,9 +133,12 @@ def save_to_mongo(data):
 
 
 def main():
+    # pool = Pool()
+    # htmls = pool.map(get_index,[page for page in range(1, 101)])
+    # print(page, ': ', html)
+    # for html in htmls:
     for page in range(1, 101):
-        html = get_index(KEYWORD, page)
-        # print(page, ': ', html)
+        html = get_index(page)
         if html:
             article_urls = parse_index(html)
             for article_url in article_urls:
@@ -147,3 +152,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+    print("Done!")
